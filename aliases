@@ -1,0 +1,10 @@
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+alias n=nvim
+alias v=vim
+
+
+# Local aliases
+[ -r ~/.aliases_local ] && source ~/.aliases_local
