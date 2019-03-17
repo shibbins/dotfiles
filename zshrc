@@ -43,11 +43,25 @@ zstyle ':completion::complete:*' use-cache 1
 autoload -U edit-command-line
 zle -N edit-command-line
 
+# Fancy Ctrl-z
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+
+
 # Key bindings
 bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
+bindkey '^z' fancy-ctrl-z
 KEYTIMEOUT=20
 
 # Enable Emacs bindings when in insert mode
