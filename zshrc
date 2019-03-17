@@ -39,10 +39,15 @@ prompt pure
 autoload -U compinit
 zstyle ':completion::complete:*' use-cache 1
 
+# Edit command line
+autoload -U edit-command-line
+zle -N edit-command-line
 
 # Key bindings
 bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
 KEYTIMEOUT=20
 
 
