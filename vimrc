@@ -1,7 +1,7 @@
 " config file for either nvim or vim
 
 " Load Plugins with vim-plug
-call plug#begin('.vim/plugged')
+call plug#begin('~/.vim/plugged')
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
