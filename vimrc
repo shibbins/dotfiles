@@ -244,3 +244,8 @@ endfunction
 function! MyFilepath()
     return expand('%:p:h')
 endfunction
+
+if filereadable(expand('~/.vimrc_local'))
+    source ~/.vimrc_local
+endif
+
