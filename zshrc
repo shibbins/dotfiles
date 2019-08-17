@@ -84,6 +84,7 @@ bindkey -M viins '^y'  yank
 
 
 # Misc
+[ -f ~/zsh-vi-search.zsh ] && source ~/zsh-vi-search.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 PATH=$PATH:~/go/bin
