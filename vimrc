@@ -127,7 +127,7 @@ imap <right> <nop>
 
 " Enable fzf for fuzzy finding
 set rtp+=~/.fzf
-let $FZF_DEFAULT_COMMAND='ag -g ""'
+let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --smart-case --glob "!{.git,.hg}"'
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_linters = {
