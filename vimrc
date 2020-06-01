@@ -5,14 +5,6 @@ if $USER != "root"
   " Load Plugins with vim-plug
   call plug#begin('~/.vim/plugged')
 
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
   Plug 'fatih/vim-go'
@@ -20,18 +12,20 @@ if $USER != "root"
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'mhinz/vim-signify'
-  Plug 'Raimondi/delimitMate'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'sbdchd/neoformat'
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
-  Plug 'w0rp/ale'
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
-  Plug 'zchee/deoplete-jedi'
 
   Plug 'ryanoasis/vim-devicons'
 
   call plug#end()
+  " Install CoC extensions if not present
+  let g:coc_global_extensions = [
+    \ 'coc-json',
+    \ 'coc-snippets',
+    \ ]
 endif
 
 
@@ -47,6 +41,7 @@ set autoindent                  " Enabile Autoindent
 set autoread                    " Automatically read changed files
 set autowrite                   " Automatically save before :next, :make etc.
 set backspace=indent,eol,start  " Makes backspace key more powerful.
+set cmdheight=2                 " Better display for messages
 set completeopt=menu,menuone    " Show popup menu, even if there is one entry
 set encoding=utf-8              " Set default encoding to UTF-8
 set fileformats=unix,dos,mac    " Prefer Unix over Windows over OS 9 formats
@@ -64,12 +59,16 @@ set nonumber                    " Do not show line numbers
 set noshowmatch                 " Do not show matching brackets by flickering
 set noshowmode                  " We show the mode with airline or lightline
 set noswapfile                  " Don't use swapfile
+set nowritebackup               " Some language servers have issues with backup files
 set pumheight=10                " Completion window max size
 set showcmd                     " Show me what I'm typing
+set shortmess+=c                " Don't give |ins-completion-menu| messages
+set signcolumn=yes              " Always show the sign column
 set smartcase                   " Don't be case insensitive when search begins with upper case
 set splitright                  " Vertical windows should be split to right
 set splitbelow                  " Horizontal windows should split to bottom
 set ttyfast                     " Indicate fast terminal conn for faster redraw
+set updatetime=300              " You will have a bad experience with diagnostic messages when it's default (4000)
 set viminfo='1000               " Set oldfiles to 1000 last recently opened files
 
 if !has('nvim')
@@ -123,29 +122,40 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
+" COC vim gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 """"""""""""""""""""""
 "  Plugin settings   "
 """"""""""""""""""""""
 
+" Coc settings
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by another plugin.
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Navigate snippet placeholders using tab
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
+
+" Use enter to accept snippet expansion
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+
 " Enable fzf for fuzzy finding
 set rtp+=~/.fzf
 let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --smart-case --glob "!{.git,.hg}"'
-
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_linters = {
-\   'go': ['golint', 'govet'],
-\   'python': ['pycodestyle'],
-\   'proto': ['protoc-gen-lint']
-\}
-let g:ale_linters_explicit = 1
-let g:ale_sign_error = '✖'
-let g:ale_sign_warning = '⚠'
-
-let g:deoplete#enable_at_startup = 1
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
-let g:deoplete#sources#go#unimported_packages = 1
 
 let g:go_fmt_command = "goimports"
 let g:go_highlight_types = 0
