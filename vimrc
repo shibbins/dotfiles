@@ -1,35 +1,38 @@
 " config file for either nvim or vim
 
-" Load Plugins with vim-plug
-call plug#begin('~/.vim/plugged')
+" Only load plugins when not running as root
+if $USER != "root"
+  " Load Plugins with vim-plug
+  call plug#begin('~/.vim/plugged')
 
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'edkolev/tmuxline.vim'
+  Plug 'fatih/vim-go'
+  Plug 'itchyny/lightline.vim'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+  Plug 'mhinz/vim-signify'
+  Plug 'Raimondi/delimitMate'
+  Plug 'sbdchd/neoformat'
+  Plug 'tpope/vim-abolish'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-surround'
+  Plug 'w0rp/ale'
+  Plug 'zchee/deoplete-go', { 'do': 'make'}
+  Plug 'zchee/deoplete-jedi'
+
+  Plug 'ryanoasis/vim-devicons'
+
+  call plug#end()
 endif
-
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'edkolev/tmuxline.vim'
-Plug 'fatih/vim-go'
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'mhinz/vim-signify'
-Plug 'Raimondi/delimitMate'
-Plug 'sbdchd/neoformat'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'w0rp/ale'
-Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'zchee/deoplete-jedi'
-
-Plug 'ryanoasis/vim-devicons'
-
-call plug#end()
 
 
 """"""""""""""""""""""
@@ -82,7 +85,7 @@ endif
 
 
 " Colorscheme
-set background=dark
+set background=light
 set termguicolors
 colorscheme solarized8
 
