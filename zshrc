@@ -10,6 +10,7 @@
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 export EDITOR="nvim"
+export VISUAL="nvim"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --smart-case --glob "!{.git,.hg}/*" 2> /dev/null'
 
 
@@ -88,4 +89,4 @@ bindkey -M viins '^y'  yank
 [ -f ~/zsh-vi-search.zsh ] && source ~/zsh-vi-search.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-PATH=$PATH:~/go/bin
+export PATH=$PATH:~/go/bin

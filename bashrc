@@ -7,6 +7,7 @@ fi
 
 # Exports
 export EDITOR="nvim"
+export VISUAL="nvim"
 
 
 # History
@@ -23,4 +24,4 @@ bind '"jk":vi-movement-mode'
 # Misc
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-PATH=$PATH:~/go/bin
+export PATH=$PATH:~/go/bin
