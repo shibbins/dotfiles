@@ -33,6 +33,7 @@ setopt share_history
 
 # Prompt
 fpath=( "$HOME/.zfunctions" $fpath )
+fpath+=$HOME/.zsh/pure
 autoload -U promptinit; promptinit
 prompt pure
 
