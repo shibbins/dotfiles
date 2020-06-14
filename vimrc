@@ -24,6 +24,7 @@ if $USER != "root"
   " Install CoC extensions if not present
   let g:coc_global_extensions = [
     \ 'coc-json',
+    \ 'coc-rust-analyzer',
     \ 'coc-snippets',
     \ ]
 endif
