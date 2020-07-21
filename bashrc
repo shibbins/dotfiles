@@ -4,6 +4,8 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
+source ~/.aliases
+
 
 # Exports
 export EDITOR="nvim"
