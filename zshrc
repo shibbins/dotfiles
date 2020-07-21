@@ -1,7 +1,3 @@
-# Local settings
-[ -r ~/.zsh_local ] && source ~/.zsh_local
-
-
 # Aliases
 [ -f ~/.aliases ] && source ~/.aliases
 
@@ -91,3 +87,6 @@ bindkey -M viins '^y'  yank
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export PATH=$PATH:~/go/bin
+
+# Local settings
+[ -r ~/.zsh_local ] && source ~/.zsh_local
