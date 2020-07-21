@@ -8,6 +8,7 @@ export LANG="en_US.UTF-8"
 export EDITOR="nvim"
 export VISUAL="nvim"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --smart-case --glob "!{.git,.hg}/*" 2> /dev/null'
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude ".git" --exclude ".hg"'
 
 
 # History

@@ -5,6 +5,10 @@ alias ....='cd ../../..'
 alias n=nvim
 alias v=vim
 
+if ! type fd > /dev/null; then
+  alias fd=fdfind
+fi
+
 
 # Local aliases
 [ -r ~/.aliases_local ] && source ~/.aliases_local
