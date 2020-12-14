@@ -66,7 +66,7 @@ if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
 fi
 
 # Install vim-plug for neovim
-if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+if [ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]; then
 	echo "Installing VIM plug for neovim"
 	sh -c 'curl -sfLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
 	--create-dirs \
