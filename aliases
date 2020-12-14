@@ -5,7 +5,7 @@ alias ....='cd ../../..'
 alias n=nvim
 alias v=vim
 
-if ! type fd > /dev/null; then
+if ! type fd &> /dev/null; then
   alias fd=fdfind
 fi
 

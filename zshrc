@@ -10,7 +10,7 @@ export VISUAL="nvim"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --smart-case --glob "!{.git,.hg}/*" 2> /dev/null'
 export FZF_ALT_C_COMMAND='fdfind --type d --hidden --follow --exclude ".git" --exclude ".hg"'
 
-if type fdfind > /dev/null 2>&1; then
+if type fdfind &> /dev/null; then
 	export FZF_ALT_C_COMMAND='fdfind --type d --hidden --follow --exclude ".git" --exclude ".hg"'
 fi
 
