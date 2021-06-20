@@ -17,6 +17,7 @@ if $USER != "root"
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
+  Plug 'vimwiki/vimwiki'
 
   Plug 'ryanoasis/vim-devicons'
 
