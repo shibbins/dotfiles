@@ -106,6 +106,8 @@ inoremap jk <Esc>
 nnoremap <CR> :noh<CR>
 nnoremap <Leader>ag :Ag <C-R><C-W><CR>
 nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>h :History<CR>
+nnoremap <Leader>rg :Rg <C-R><C-W><CR>
 nnoremap <Leader><Enter> :Buffers<CR>
 
 " Move between splits
