@@ -44,7 +44,7 @@ set nocompatible                " Enables us Vim specific features
 filetype off                    " Reset filetype detection first ...
 filetype plugin indent on       " ... and enable filetype detection
 
-set autoindent                  " Enabile Autoindent
+set autoindent                  " Enable Autoindent
 set autoread                    " Automatically read changed files
 set autowrite                   " Automatically save before :next, :make etc.
 set backspace=indent,eol,start  " Makes backspace key more powerful.
