@@ -3,7 +3,11 @@
 " Only load plugins when not running as root
 if $USER != "root"
   " Load Plugins with vim-plug
-  call plug#begin('~/.vim/plugged')
+  if has("nvim")
+    call plug#begin('~/.config/nvim/plugged')
+  else
+    call plug#begin('~/.vim/plugged')
+  endif
 
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
