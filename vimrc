@@ -5,14 +5,15 @@ if $USER != "root"
   " Load Plugins with vim-plug
   if has("nvim")
     call plug#begin('~/.config/nvim/plugged')
+    Plug 'hoob3rt/lualine.nvim'
   else
     call plug#begin('~/.vim/plugged')
+    Plug 'itchyny/lightline.vim'
   endif
 
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
   Plug 'fatih/vim-go'
-  Plug 'itchyny/lightline.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'mhinz/vim-signify'
@@ -237,33 +238,50 @@ augroup END
 
 
 """"""""""""""""""""""
-"     Lightline      "
+"     Statusline     "
 """"""""""""""""""""""
 
-let g:lightline = {
-      \ 'colorscheme': 'solarized',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'filetype': 'MyFiletype',
-      \   'fileformat': 'MyFileformat',
-      \   'filepath': 'MyFilepath',
-      \ }
-      \ }
+if has("nvim")
+lua << EOF
+local function progress() return [[%p%%]] end
+sections = {lualine_a = {hello}}
+  require'lualine'.setup {
+    options = {
+      theme = 'solarized_light',
+      component_separators = {'|', '|'},
+    },
+    sections = {
+      lualine_x = {'fileformat', 'encoding', 'filetype'},
+      lualine_y = {progress},
+    },
+  }
+EOF
+else
+  let g:lightline = {
+        \ 'colorscheme': 'solarized',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'filetype': 'MyFiletype',
+        \   'fileformat': 'MyFileformat',
+        \   'filepath': 'MyFilepath',
+        \ }
+        \ }
 
-function! MyFiletype()
-    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-endfunction
+  function! MyFiletype()
+      return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+  endfunction
 
-function! MyFileformat()
-    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-endfunction
+  function! MyFileformat()
+      return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+  endfunction
 
-function! MyFilepath()
-    return expand('%:p:h')
-endfunction
+  function! MyFilepath()
+      return expand('%:p:h')
+  endfunction
+endif
 
 if filereadable(expand('~/.vimrc_local'))
     source ~/.vimrc_local
