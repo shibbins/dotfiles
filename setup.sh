@@ -88,3 +88,6 @@ if [ ! -f "$HOME/.vim/colors/solarized8.vim" ]; then
 	--create-dirs \
 	https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
 fi
+
+nvim +PlugInstall +qall
+vim +PlugInstall +qall
