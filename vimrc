@@ -1,4 +1,5 @@
 " config file for either nvim or vim
+set nocompatible                " Enable Vim specific features
 
 " Only load plugins when not running as root
 if $USER != "root"
@@ -39,10 +40,6 @@ endif
 """"""""""""""""""""""
 "      Settings      "
 """"""""""""""""""""""
-
-set nocompatible                " Enables us Vim specific features
-filetype off                    " Reset filetype detection first ...
-filetype plugin indent on       " ... and enable filetype detection
 
 set autoindent                  " Enable Autoindent
 set autoread                    " Automatically read changed files
