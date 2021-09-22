@@ -113,10 +113,6 @@ nnoremap <C-k> <C-W><C-K>
 nnoremap <C-l> <C-W><C-L>
 nnoremap <C-h> <C-W><C-H>
 
-" Create new splits
-nnoremap <silent><leader>v- <C-w>S
-nnoremap <silent><leader>vv <C-w>v
-
 " Disable Arrow keys in Escape mode
 map <up> <nop>
 map <down> <nop>
