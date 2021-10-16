@@ -53,8 +53,9 @@ fi
 
 # Install tmux plugin manager
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-	echo "Installing TMUX plugin manager"
+	echo "Installing TMUX plugin manager and plugins"
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+	~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
 # Install vim-plug for vim
