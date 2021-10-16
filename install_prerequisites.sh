@@ -2,18 +2,40 @@
 
 set -eu
 
-apt-get update
+# Fedora/RHEL
+which dnf >/dev/null && {
+  dnf install -y \
+    bat \
+    curl \
+    fd-find \
+    git \
+    neovim \
+    nodejs \
+    npm \
+    ripgrep \
+    tmux \
+    vim \
+    xsel \
+    zsh;
+  exit 0;
+}
 
-apt-get install -qq -y \
-	bat \
-	curl \
-	fd-find \
-	git \
-	neovim \
-	nodejs \
-	npm \
-	ripgrep \
-	tmux \
-	vim \
-	xsel \
-	zsh
+# Debian based distros
+which apt >/dev/null && {
+  apt-get update
+
+  apt-get install -qq -y \
+    bat \
+    curl \
+    fd-find \
+    git \
+    neovim \
+    nodejs \
+    npm \
+    ripgrep \
+    tmux \
+    vim \
+    xsel \
+    zsh;
+  exit 0;
+}
