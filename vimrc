@@ -6,7 +6,7 @@ if $USER != "root"
   " Load Plugins with vim-plug
   if has("nvim")
     call plug#begin('~/.config/nvim/plugged')
-    Plug 'hoob3rt/lualine.nvim'
+    Plug 'nvim-lualine/lualine.nvim'
   else
     call plug#begin('~/.vim/plugged')
     Plug 'itchyny/lightline.vim'
@@ -238,18 +238,15 @@ augroup END
 
 if has("nvim")
 lua << EOF
-local function progress() return [[%p%%]] end
-sections = {lualine_a = {hello}}
-  require'lualine'.setup {
-    options = {
-      theme = 'solarized_light',
-      component_separators = {'|', '|'},
-    },
-    sections = {
-      lualine_x = {'fileformat', 'encoding', 'filetype'},
-      lualine_y = {progress},
-    },
-  }
+require'lualine'.setup {
+  options = {
+    theme = 'solarized_light',
+    component_separators = {left = '|', right = '|'},
+  },
+  sections = {
+    lualine_x = {'fileformat', 'encoding', 'filetype'},
+  },
+}
 EOF
 else
   let g:lightline = {
