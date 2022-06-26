@@ -10,27 +10,33 @@ sudo $PWD/install_prerequisites.sh
 echo ""
 echo "Prerequisites installed"
 
-
 echo ""
 echo "Backing up files"
 FILES=(
-    "${HOME}/.aliases"
-    "${HOME}/.bashrc"
-    "${HOME}/.tmux.conf"
-    "${HOME}/.tmuxlightline"
-    "${HOME}/.vimrc"
-    "${HOME}/.zshrc"
-    "${HOME}/.config/nvim/init.vim"
+  "${HOME}/.aliases"
+  "${HOME}/.bashrc"
+  "${HOME}/.tmux.conf"
+  "${HOME}/.tmuxlightline"
+  "${HOME}/.vimrc"
+  "${HOME}/.zshrc"
 )
 for FILE in "${FILES[@]}"; do
-	if [ -f "$FILE" ]; then
-		echo "Backing up $FILE to $FILE.old"
-    		mv "$FILE" "$FILE".old
-	fi
+  if [ -f "$FILE" ]; then
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    echo "Backing up $FILE to $FILE.$TIMESTAMP"
+    mv "$FILE" "$FILE".$TIMESTAMP
+  fi
 done
 
+NVIM_CONF_DIR="${HOME}/.config/nvim"
+if [ -d "${HOME}/.config/nvim" ]; then
+  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+  echo "Backing up neovim config to ${NVIM_CONF_DIR}_$TIMESTAMP"
+  mv "${NVIM_CONF_DIR}" "${NVIM_CONF_DIR}_$TIMESTAMP"
+fi
 
 mkdir -p ~/.config/nvim/colors
+mkdir -p ~/.config/nvim/lua
 mkdir -p ~/.vim/plugged
 
 ln -s $PWD/aliases ~/.aliases
@@ -38,57 +44,52 @@ ln -s $PWD/bashrc ~/.bashrc
 ln -s $PWD/tmux.conf ~/.tmux.conf
 ln -s $PWD/tmuxlightline ~/.tmuxlightline
 ln -s $PWD/vimrc ~/.vimrc
-ln -s $PWD/vimrc ~/.config/nvim/init.vim
 ln -s $PWD/zshrc ~/.zshrc
+ln -s $PWD/.config/nvim/init.lua ~/.config/nvim/init.lua
+for FILE in $(ls "$PWD/.config/nvim/lua/"); do
+  echo "${NVIM_CONF_DIR}/lua/${FILE}"
+  ln -s "$PWD/.config/nvim/lua/${FILE}" "${NVIM_CONF_DIR}/lua/${FILE}"
+done
 
 echo ""
 
-
 # Install pure prompt
 if [ ! -d "$HOME/.zsh/pure" ]; then
-	echo "Installing Pure prompt"
-	mkdir -p "$HOME/.zsh"
-	git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+  echo "Installing Pure prompt"
+  mkdir -p "$HOME/.zsh"
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 fi
 
 # Install tmux plugin manager
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-	echo "Installing TMUX plugin manager and plugins"
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-	~/.tmux/plugins/tpm/bin/install_plugins
+  echo "Installing TMUX plugin manager and plugins"
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
 # Install vim-plug for vim
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
-	echo "Installing VIM plug"
-	curl -sfLo ~/.vim/autoload/plug.vim \
-	--create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# Install vim-plug for neovim
-if [ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]; then
-	echo "Installing VIM plug for neovim"
-	sh -c 'curl -sfLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim \
-	--create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  echo "Installing VIM plug"
+  curl -sfLo ~/.vim/autoload/plug.vim \
+    --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
 # Install solarized8 theme for neovim
 if [ ! -f "$HOME/.config/nvim/colors/solarized8.vim" ]; then
-	echo "Installing neovim colorscheme"
-	curl -sfLo ~/.config/nvim/colors/solarized8.vim \
-	--create-dirs \
-	https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
+  echo "Installing neovim colorscheme"
+  curl -sfLo ~/.config/nvim/colors/solarized8.vim \
+    --create-dirs \
+    https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
 fi
 
 # Install solarized8 theme for vim
 if [ ! -f "$HOME/.vim/colors/solarized8.vim" ]; then
-	echo "Installing vim colorscheme"
-	curl -sfLo ~/.vim/colors/solarized8.vim \
-	--create-dirs \
-	https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
+  echo "Installing vim colorscheme"
+  curl -sfLo ~/.vim/colors/solarized8.vim \
+    --create-dirs \
+    https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
 fi
 
-nvim +PlugInstall +qall
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 vim +PlugInstall +qall
