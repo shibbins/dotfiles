@@ -16,23 +16,17 @@ local o = vim.o
 local opt = vim.opt
 
 ---------------------------------------
--- Packer
+-- Packer and plugins
 ---------------------------------------
 
--- Auto install wbthomason/packer.nvim if it does not exist
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	print("Downloading wbthomason/packer.nvim...")
-	local install_cmd = "git clone https://github.com/wbthomason/packer.nvim --depth 1 " .. install_path
-	local stdout = vim.fn.system(install_cmd)
-	print(stdout)
-	print("You'll need to restart now")
-end
-cmd([[ packadd packer.nvim ]])
-cmd([[ autocmd BufWritePost plugins.lua PackerCompile ]])
+require("plugins")
 
 -- Speed up loading of Lua modules
-require("impatient")
+local ok, impatient = pcall(require, "impatient")
+if not ok then
+	print("Failed to load impatient.nvim")
+	return
+end
 
 ---------------------------------------
 -- Settings
@@ -179,7 +173,12 @@ cmd([[
 ]])
 
 -- nvim-treesitter/nvim-treesitter
-require("nvim-treesitter.configs").setup({
+local ok, treesitter = pcall(require, "nvim-treesitter.configs")
+if not ok then
+	return
+end
+
+treesitter.setup{
 	ensure_installed = {
 		"bash",
 		"c",
@@ -209,7 +208,7 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 		disable = {},
 	},
-})
+}
 
 require("lsp")
 
