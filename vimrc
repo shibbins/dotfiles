@@ -1,24 +1,18 @@
-" config file for either nvim or vim
+" config file for vim
 set nocompatible                " Enable Vim specific features
 
 " Only load plugins when not running as root
 if $USER != "root"
   " Load Plugins with vim-plug
-  if has("nvim")
-    call plug#begin('~/.config/nvim/plugged')
-    Plug 'nvim-lualine/lualine.nvim'
-  else
-    call plug#begin('~/.vim/plugged')
-    Plug 'itchyny/lightline.vim'
-  endif
+  call plug#begin('~/.vim/plugged')
 
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'edkolev/tmuxline.vim'
   Plug 'fatih/vim-go'
+  Plug 'itchyny/lightline.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'mhinz/vim-signify'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'sbdchd/neoformat'
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-fugitive'
@@ -28,12 +22,6 @@ if $USER != "root"
   Plug 'ryanoasis/vim-devicons'
 
   call plug#end()
-  " Install CoC extensions if not present
-  let g:coc_global_extensions = [
-    \ 'coc-json',
-    \ 'coc-rust-analyzer',
-    \ 'coc-snippets',
-    \ ]
 endif
 
 
@@ -72,13 +60,11 @@ set smartcase                   " Don't be case insensitive when search begins w
 set splitright                  " Vertical windows should be split to right
 set splitbelow                  " Horizontal windows should split to bottom
 set ttyfast                     " Indicate fast terminal conn for faster redraw
+set ttymouse=xterm2             " Indicate terminal type for mouse codes
+set ttyscroll=3                 " Speedup scrolling
 set updatetime=300              " You will have a bad experience with diagnostic messages when it's default (4000)
 set viminfo='1000               " Set oldfiles to 1000 last recently opened files
 
-if !has('nvim')
-  set ttymouse=xterm2           " Indicate terminal type for mouse codes
-  set ttyscroll=3               " Speedup scrolling
-endif
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')
@@ -125,36 +111,9 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
-" COC vim gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
 """"""""""""""""""""""
 "  Plugin settings   "
 """"""""""""""""""""""
-
-" Coc settings
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by another plugin.
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" Navigate snippet placeholders using tab
-let g:coc_snippet_next = '<Tab>'
-let g:coc_snippet_prev = '<S-Tab>'
-
-" Use enter to accept snippet expansion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Enable fzf for fuzzy finding
 set rtp+=~/.fzf
@@ -201,24 +160,6 @@ augroup go
   autocmd!
   " Make tabs 1/2 size in Go files.
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab shiftwidth=4 tabstop=4 
-  " :GoBuild
-  autocmd FileType go nmap <leader>gb <Plug>(go-build)
-  " :GoTest
-  autocmd FileType go nmap <leader>gt  <Plug>(go-test)
-  " :GoRun
-  autocmd FileType go nmap <leader>gr  <Plug>(go-run)
-  " :GoDoc
-  autocmd FileType go nmap <Leader>gd <Plug>(go-doc)
-  " :GoCoverageToggle
-  autocmd FileType go nmap <Leader>gc <Plug>(go-coverage-toggle)
-  " :GoInfo
-  autocmd FileType go nmap <Leader>gi <Plug>(go-info)
-  " :GoMetaLinter
-  autocmd FileType go nmap <Leader>gl <Plug>(go-metalinter)
-  " :GoDef but opens in a vertical split
-  autocmd FileType go nmap <Leader>gdv <Plug>(go-def-vertical)
-  " :GoDef but opens in a horizontal split
-  autocmd FileType go nmap <Leader>ds <Plug>(go-def-split)
 augroup END
 
 augroup python
@@ -236,44 +177,35 @@ augroup END
 "     Statusline     "
 """"""""""""""""""""""
 
-if has("nvim")
-lua << EOF
-require'lualine'.setup {
-  options = {
-    theme = 'solarized_light',
-    component_separators = {left = '|', right = '|'},
-  },
-  sections = {
-    lualine_x = {'fileformat', 'encoding', 'filetype'},
-  },
-}
-EOF
-else
-  let g:lightline = {
-        \ 'colorscheme': 'solarized',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'readonly', 'filename', 'modified' ] ]
-        \ },
-        \ 'component_function': {
-        \   'filetype': 'MyFiletype',
-        \   'fileformat': 'MyFileformat',
-        \   'filepath': 'MyFilepath',
-        \ }
-        \ }
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filetype': 'MyFiletype',
+      \   'fileformat': 'MyFileformat',
+      \   'filepath': 'MyFilepath',
+      \ }
+      \ }
 
-  function! MyFiletype()
-      return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-  endfunction
+function! MyFiletype()
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
 
-  function! MyFileformat()
-      return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-  endfunction
+function! MyFileformat()
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
 
-  function! MyFilepath()
-      return expand('%:p:h')
-  endfunction
-endif
+function! MyFilepath()
+    return expand('%:p:h')
+endfunction
+
+
+""""""""""""""""""""""
+"   Local settings   "
+""""""""""""""""""""""
 
 if filereadable(expand('~/.vimrc_local'))
     source ~/.vimrc_local
