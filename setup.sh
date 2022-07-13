@@ -60,6 +60,13 @@ if [ ! -d "$HOME/.zsh/pure" ]; then
   git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 fi
 
+# Install ZSH autosuggestions
+if [ ! -d "$HOME/.zsh/zsh-autosuggestions" ]; then
+  echo "Installing ZSH autosuggestions"
+  mkdir -p "$HOME/.zsh"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.zsh/zsh-autosuggestions"
+fi
+
 # Install tmux plugin manager
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
   echo "Installing TMUX plugin manager and plugins"
