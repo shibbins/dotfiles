@@ -178,7 +178,7 @@ if not ok then
 	return
 end
 
-treesitter.setup{
+treesitter.setup({
 	ensure_installed = {
 		"bash",
 		"c",
@@ -208,7 +208,7 @@ treesitter.setup{
 		enable = true,
 		disable = {},
 	},
-}
+})
 
 require("lsp")
 
@@ -253,7 +253,7 @@ require("toggleterm").setup({
 -- jose-elias-alvarez/null-ls.nvim
 require("null-ls").setup({
 	on_attach = function(client)
-		if client.resolved_capabilities.document_formatting then
+		if client.server_capabilities.document_formatting then
 			cmd([[
             augroup LspFormatting
                 autocmd! * <buffer>
@@ -318,7 +318,6 @@ require("nvim-tree").setup({
 	},
 	view = {
 		width = 30,
-		height = 30,
 		hide_root_folder = false,
 		side = "left",
 		mappings = {
