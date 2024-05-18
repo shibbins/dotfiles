@@ -31,6 +31,7 @@ endif
 
 set autoindent                  " Enable Autoindent
 set autoread                    " Automatically read changed files
+
 set autowrite                   " Automatically save before :next, :make etc.
 set backspace=indent,eol,start  " Makes backspace key more powerful.
 set cmdheight=2                 " Better display for messages

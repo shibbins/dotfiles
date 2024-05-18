@@ -5,7 +5,7 @@ set -eu
 cd "$(dirname "$0")"
 
 echo "Installing prerequisites"
-sudo $PWD/install_prerequisites.sh
+sudo $PWD/install_prerequisites.sh || echo "Failed to install prerequisites"; exit 1
 
 echo ""
 echo "Prerequisites installed"
@@ -35,8 +35,7 @@ if [ -d "${HOME}/.config/nvim" ]; then
   mv "${NVIM_CONF_DIR}" "${NVIM_CONF_DIR}_$TIMESTAMP"
 fi
 
-mkdir -p ~/.config/nvim/colors
-mkdir -p ~/.config/nvim/lua
+mkdir -p ~/.config/nvim/lua/plugins
 mkdir -p ~/.vim/plugged
 
 ln -s $PWD/aliases ~/.aliases
@@ -46,6 +45,7 @@ ln -s $PWD/tmuxlightline ~/.tmuxlightline
 ln -s $PWD/vimrc ~/.vimrc
 ln -s $PWD/zshrc ~/.zshrc
 ln -s $PWD/.config/nvim/init.lua ~/.config/nvim/init.lua
+ln -s $PWD/.config/nvim/plugins/init.lua ~/.config/nvim/plugins/init.lua
 for FILE in $(ls "$PWD/.config/nvim/lua/"); do
   echo "${NVIM_CONF_DIR}/lua/${FILE}"
   ln -s "$PWD/.config/nvim/lua/${FILE}" "${NVIM_CONF_DIR}/lua/${FILE}"
@@ -76,18 +76,10 @@ fi
 
 # Install vim-plug for vim
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
-  echo "Installing VIM plug"
+  echo "Installing vim-plug"
   curl -sfLo ~/.vim/autoload/plug.vim \
     --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# Install solarized8 theme for neovim
-if [ ! -f "$HOME/.config/nvim/colors/solarized8.vim" ]; then
-  echo "Installing neovim colorscheme"
-  curl -sfLo ~/.config/nvim/colors/solarized8.vim \
-    --create-dirs \
-    https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
 fi
 
 # Install solarized8 theme for vim
@@ -98,5 +90,5 @@ if [ ! -f "$HOME/.vim/colors/solarized8.vim" ]; then
     https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim
 fi
 
-nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+nvim --headless "+Lazy! sync" +qa
 vim +PlugInstall +qall
