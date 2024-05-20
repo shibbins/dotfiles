@@ -18,26 +18,21 @@ return {
 		version = false,
 		opts = {
 			mappings = {
-				add = "za", -- Add surrounding in Normal and Visual modes
-				delete = "zd", -- Delete surrounding
-				replace = "zr", -- Replace surrounding
+				add = "<leader>sa", -- Add surrounding in Normal and Visual modes
+				delete = "<leader>sd", -- Delete surrounding
+				replace = "<leader>sr", -- Replace surrounding
 			},
 		},
 	},
-	{ "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" }, opts = {} },
-	{ "numToStr/Comment.nvim", lazy = false, opts = {} },
 	{
 		"folke/flash.nvim",
 		event = "VeryLazy",
 		opts = {},
-		-- stylua: ignore
-		keys = {
+    -- stylua: ignore
+    keys = {
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
       { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-      -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-      -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-      -- { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-   },
+    },
 	},
 	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
 	{
@@ -48,58 +43,6 @@ return {
 			require("which-key").setup({})
 		end,
 	},
-	{ "karb94/neoscroll.nvim", opts = {
-		easing_function = "quadratic",
-	} },
-	{ "norcalli/nvim-colorizer.lua", event = "BufEnter" },
-	{ "ntpeters/vim-better-whitespace", event = "BufEnter" },
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			{ "nvim-lua/plenary.nvim" },
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
-			},
-		},
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		opts = {
-			ensure_installed = {
-				"bash",
-				"c",
-				"comment",
-				"cpp",
-				"css",
-				"go",
-				"html",
-				"javascript",
-				"jsdoc",
-				"json",
-				"lua",
-				"markdown",
-				"markdown_inline",
-				"proto",
-				"python",
-				"rust",
-				"sql",
-				"toml",
-				"typescript",
-				"vim",
-				"vimdoc",
-				"yaml",
-				"yang",
-			},
-			highlight = {
-				enable = true,
-				disable = {},
-			},
-		},
-	},
-	{ "ojroques/nvim-osc52", event = "BufEnter" },
-	{ "tpope/vim-abolish", event = "BufEnter" },
 	{
 		"hoob3rt/lualine.nvim",
 		opts = {
@@ -113,7 +56,103 @@ return {
 			},
 		},
 	},
-	{ "vimwiki/vimwiki" },
+	{ "karb94/neoscroll.nvim", opts = {
+		easing_function = "quadratic",
+	} },
+	{
+		"ibhagwan/fzf-lua",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = {
+			files = {
+				fd_opts = [[--color=never --type f --follow --ignore]],
+				rg_opts = [[--color=never --files --follow --ignore]],
+			},
+		},
+	},
+	{ "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" }, opts = {} },
+	{ "norcalli/nvim-colorizer.lua", event = "BufEnter" },
+	{ "numToStr/Comment.nvim", lazy = false, opts = {} },
+	{ "ntpeters/vim-better-whitespace", event = "BufEnter" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		version = false,
+		build = ":TSUpdate",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			lazy = true,
+			config = function()
+				require("nvim-treesitter.configs").setup({
+					textobjects = {
+						select = {
+							enable = true,
+							-- Automatically jump forward to textobj, similar to targets.vim
+							lookahead = true,
+							keymaps = {
+								-- You can use the capture groups defined in textobjects.scm
+								["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+								["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
+
+								["am"] = { query = "@function.outer", desc = "Select outer part of a method/function definition" },
+								["im"] = { query = "@function.inner", desc = "Select inner part of a method/function definition" },
+
+								["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+								["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
+
+								["af"] = { query = "@call.outer", desc = "Select outer part of a function call" },
+								["if"] = { query = "@call.inner", desc = "Select inner part of a function call" },
+							},
+						},
+					},
+				})
+			end,
+		},
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local treesitter = require("nvim-treesitter.configs")
+			---@type TSConfig
+			---@diagnostic disable-next-line: missing-fields
+			opts = {
+				highlight = { enable = true },
+				indent = { enable = true },
+				ensure_installed = {
+					"bash",
+					"c",
+					"comment",
+					"cpp",
+					"css",
+					"go",
+					"html",
+					"javascript",
+					"jsdoc",
+					"json",
+					"lua",
+					"markdown",
+					"markdown_inline",
+					"proto",
+					"python",
+					"rust",
+					"sql",
+					"toml",
+					"typescript",
+					"vim",
+					"vimdoc",
+					"yaml",
+					"yang",
+				},
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "<C-space>",
+						node_incremental = "<C-space>",
+						scope_incremental = false,
+						node_decremental = "<bs>",
+					},
+				},
+			}
+			treesitter.setup(opts)
+		end,
+	},
+	{ "ojroques/nvim-osc52", event = "BufEnter" },
 	{ "RRethy/vim-illuminate", event = "BufEnter" },
 	{
 		"stevearc/conform.nvim",
@@ -125,10 +164,10 @@ return {
 					lsp_fallback = true,
 				},
 				formatters_by_ft = {
+					bash = { "shfmt" },
 					javascript = { { "prettierd", "prettier" } },
 					lua = { "stylua" },
 					sh = { "shfmt" },
-					shell = { "shfmt" },
 					zsh = { "shfmt" },
 				},
 			})
@@ -139,32 +178,35 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {},
 	},
+	{ "tpope/vim-abolish", event = "BufEnter" },
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+	},
+	{ "vimwiki/vimwiki" },
 
 	-- Completion
-	-- { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
-	-- { "williamboman/mason.nvim" },
-	-- { "neovim/nvim-lspconfig" },
-	-- { "hrsh7th/cmp-nvim-lsp" },
-	-- { "hrsh7th/nvim-cmp" },
-	-- { "L3MON4D3/LuaSnip" },
-	-- { "rafamadriz/friendly-snippets" },
-	-- { "saadparwaiz1/cmp_luasnip" },
-	-- { "onsails/lspkind-nvim" },
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
 	{
 		"hrsh7th/nvim-cmp",
+		event = "InsertEnter",
 		dependencies = {
 			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
 			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-vsnip",
-			"hrsh7th/vim-vsnip",
-			-- "L3MON4D3/LuaSnip",
-			-- "saadparwaiz1/cmp_luasnip",
 			"lukas-reineke/lsp-format.nvim",
-			"onsails/lspkind-nvim",
+			"onsails/lspkind.nvim",
+			"saadparwaiz1/cmp_luasnip",
 			"rafamadriz/friendly-snippets",
+			{
+				"L3MON4D3/LuaSnip",
+				version = "v2.*",
+				build = "make install_jsregexp",
+			},
 		},
 	},
 	{ "neovim/nvim-lspconfig" },
@@ -176,9 +218,9 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		opts = {
 			ensure_installed = {
+				"basedpyright",
 				"clangd",
 				"gopls",
-				"basedpyright",
 				"rust_analyzer",
 			},
 		},
