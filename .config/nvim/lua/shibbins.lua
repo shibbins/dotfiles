@@ -12,7 +12,7 @@ require("lazy").setup("plugins", { change_detection = {
 require("options")
 require("mappings")
 
-require("lsp2")
+require("lsp")
 require("diagnostics")
 
 -- Load local lua configuration if present
