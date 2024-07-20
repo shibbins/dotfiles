@@ -41,7 +41,7 @@ vim.keymap.set("n", "<C-k>", "<C-w>k", map_opts)
 vim.keymap.set("n", "<C-l>", "<C-w>l", map_opts)
 
 -- Diaganostics
-vim.keymap.set("n", "<Leader>xx", "<Cmd>Trouble<CR>", { silent = true, noremap = true })
+vim.keymap.set("n", "<Leader>xx", "<Cmd>Trouble diagnostics<CR>", { silent = true, noremap = true })
 vim.keymap.set("n", "<Leader>xw", "<Cmd>Trouble workspace_diagnostics<CR>", { silent = true, noremap = true })
 vim.keymap.set("n", "<Leader>xd", "<Cmd>Trouble document_diagnostics<CR>", { silent = true, noremap = true })
 vim.keymap.set("n", "<Leader>xl", "<Cmd>Trouble loclist<CR>", { silent = true, noremap = true })
