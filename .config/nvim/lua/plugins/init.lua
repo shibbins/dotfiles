@@ -70,6 +70,11 @@ return {
 		},
 	},
 	{ "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" }, opts = {} },
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		opts = {},
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+	},
 	{ "norcalli/nvim-colorizer.lua", event = "BufEnter" },
 	{ "numToStr/Comment.nvim", lazy = false, opts = {} },
 	{ "ntpeters/vim-better-whitespace", event = "BufEnter" },
