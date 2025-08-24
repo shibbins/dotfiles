@@ -235,27 +235,25 @@ return {
 	{ "vimwiki/vimwiki" },
 
 	-- Completion
-	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
 	{
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
-		dependencies = {
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-cmdline",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-nvim-lsp-signature-help",
-			"hrsh7th/cmp-nvim-lua",
-			"lukas-reineke/lsp-format.nvim",
-			"onsails/lspkind.nvim",
-			"saadparwaiz1/cmp_luasnip",
-			"rafamadriz/friendly-snippets",
-			{
-				"L3MON4D3/LuaSnip",
-				version = "v2.*",
-				build = "make install_jsregexp",
+		"saghen/blink.cmp",
+		dependencies = { "rafamadriz/friendly-snippets" },
+		version = "1.*",
+		---@module 'blink.cmp'
+		---@type blink.cmp.Config
+		opts = {
+			keymap = { preset = "enter" },
+
+			appearance = {
+				nerd_font_variant = "mono",
 			},
+			completion = { documentation = { auto_show = false } },
+			sources = {
+				default = { "lsp", "path", "snippets", "buffer" },
+			},
+			fuzzy = { implementation = "prefer_rust_with_warning" },
 		},
+		opts_extend = { "sources.default" },
 	},
 	{ "neovim/nvim-lspconfig" },
 	{

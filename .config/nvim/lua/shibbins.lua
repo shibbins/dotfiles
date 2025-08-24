@@ -12,8 +12,6 @@ require("lazy").setup("plugins", { change_detection = {
 require("options")
 require("mappings")
 
-require("lsp")
-
 -- Load local lua configuration if present
 if vim.fn.filereadable(os.getenv("HOME") .. "/.config/nvim/lua/local.lua") ~= 0 then
 	require("local")
